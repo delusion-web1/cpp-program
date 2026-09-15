@@ -2,13 +2,13 @@
 #include"Triangle.h"
 #include<cmath>
 Triangle::Triangle(double x,double y,double z):a(x),b(y),c(z){}
-//ÓÃº£ÂÛ¹«Ê½¼ÆËãÈı½ÇĞÎÃæ»ı
+//ç”¨æµ·è®ºå…¬å¼è®¡ç®—ä¸‰è§’å½¢é¢ç§¯
 double Triangle::getArea() const
 {
 	double p = (a + b + c) / 2;
 	return sqrt(p * (p - a) * (p - b) * (p - c));
 }
-//¼ÆËãÈı½ÇĞÎÖÜ³¤
+//è®¡ç®—ä¸‰è§’å½¢å‘¨é•¿
 double Triangle :: getPerimeter() const
 {
 	return a + b + c;
