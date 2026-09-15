@@ -1,12 +1,12 @@
 #include"Shape.h"
 #include"Rect.h"
 Rect::Rect(double width, double height) : w(width), h(height) {}
-//¼ÆËã¾ØĞÎµÄÃæ»ı
+//è®¡ç®—çŸ©å½¢çš„é¢ç§¯
 double Rect::getArea() const
 {
 	return w * h;
 }
-//¼ÆËã¾ØĞÎµÄÖÜ³¤
+//è®¡ç®—çŸ©å½¢çš„å‘¨é•¿
 double Rect::getPerimeter() const
 {
 	return 2 * (w + h);
