@@ -4,7 +4,7 @@
 class Rect : public Shape
 {
 private:
-	double w,h;//¿íºÍ¸ß
+	double w,h;//Â¿Ã­ÂºÃÂ¸ÃŸ
 public:
 	Rect(double width, double height);
 	double getArea() const override;
