@@ -4,17 +4,17 @@
 using namespace std;
 #define PI 3.14159
 Circle::Circle(double radius) : r(radius) {}
-//计算圆的面积
+//璁＄畻鍦嗙殑闈㈢Н
 double Circle::getArea() const
 {
 	return PI * r * r;
 }
-//计算圆的周长
+//璁＄畻鍦嗙殑鍛ㄩ暱
 double Circle::getPerimeter() const
 {
 	return 2 * PI * r;
 }
 void Circle::showInfo() const
 {
-	cout << "圆形半径为： " << r << endl;
+	cout << "鍦嗗舰鍗婂緞涓猴細 " << r << endl;
 }

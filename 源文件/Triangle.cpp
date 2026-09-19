@@ -4,18 +4,18 @@
 #include<iostream>
 using namespace std;
 Triangle::Triangle(double x, double y, double z) :a(x), b(y), c(z) {}
-//用海论公式计算三角形面积
+//鐢ㄦ捣璁哄叕寮忚绠椾笁瑙掑舰闈㈢Н
 double Triangle::getArea() const
 {
 	double p = (a + b + c) / 2;
 	return sqrt(p * (p - a) * (p - b) * (p - c));
 }
-//计算三角形周长
+//璁＄畻涓夎褰㈠懆闀?
 double Triangle::getPerimeter() const
 {
 	return a + b + c;
 }
 void Triangle::showInfo() const
 {
-	cout << "三角形的三边为： " << a << ", " << b << ", " << c << endl;
+	cout << "涓夎褰㈢殑涓夎竟涓猴細 " << a << ", " << b << ", " << c << endl;
 }
