@@ -21,6 +21,31 @@ struct WrongItem
 };
 vector<Ptr> problemList;
 vector<WrongItem> wrongItems;//错题列表里面的表示形式
+//记录已经出现过的题目
+const double eps = 1e-6;
+struct UsedQuestion
+{
+	int type;
+	double p1, p2, p3;
+};
+vector<UsedQuestion> usedList;
+//浮点数作比较
+bool isEqual(double a, double b)
+{
+	return fabs(a - b) < eps;
+}
+//查重函数
+bool isRepeat(int type, double a, double b, double c)
+{
+	for (auto& q : usedList)
+	{
+		if (q.type == type && isEqual(q.p1, a) && isEqual(q.p2, b) && isEqual(q.p3, c))
+		{
+			return true;
+		}
+	}
+	return false;
+}
 Ptr createRandomShape();
 int main()
 {
@@ -103,30 +128,44 @@ int main()
 }
 Ptr createRandomShape()
 {
-	int type = rand() % 3;//0是圆形，1是矩形，2是三角形
+	int type;
+	double a, b, c;
+	do {
+		type = rand() % 3;
+		if (type == 0)
+		{
+			a = rand() % 5 + 1;
+			b = c = 0;
+		}
+		else if (type == 1)
+		{
+			a = rand() % 5 + 1;
+			b = rand() % 5 + 1;
+			c = 0;
+		}
+		else
+		{
+			do {
+				a = rand() % 4 + 2;
+				b = rand() % 4 + 2;
+				c = rand() % 4 + 2;
+			} while (a + b <= c || a + c <= b || b + c <= a);
+		}
+	} while (isRepeat(type, a, b, c));
+	usedList.push_back({ type, a, b, c });
 	if (type == 0)
 	{
-		double r = rand() % 5 + 1;
-		cout << "圆形半径为：" << r << endl;
-		return std::make_shared<Circle>(r);
+		cout << "圆形的半径为：" << a << endl;
+		return make_shared<Circle>(a);
 	}
 	else if (type == 1)
 	{
-		double w = rand() % 5 + 1;
-		double h = rand() % 5 + 1;
-		cout << "矩形的宽为：" << w << "  长为：" << h << endl;
-		return std::make_shared<Rect>(w, h);
+		cout << "矩形的长为：" << a << " 宽为：" << b << endl;
+		return make_shared<Rect>(a, b);
 	}
 	else
 	{
-		double a, b, c;
-		//保证三角形三边满足三角不等式
-		do {
-			a = rand() % 4 + 2;
-			b = rand() % 4 + 2;
-			c = rand() % 4 + 2;
-		} while (a + b <= c || a + c <= b || b + c <= a);
 		cout << "三角形的三边为：" << a << " " << b << " " << c << endl;
-		return std::make_shared<Triangle>(a, b, c);
+		return make_shared<Triangle>(a, b, c);
 	}
 }
