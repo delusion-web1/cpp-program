@@ -11,12 +11,10 @@ using namespace std;
 QuestionBank::QuestionBank(string name)
     : bankName(name), totalScore(0), FinishCount(0)
 {
-    srand((unsigned)time(NULL));//设随机种子
 }
 QuestionBank::QuestionBank()
     : bankName("默认几何题库"), totalScore(0), FinishCount(0)
 {
-    srand((unsigned)time(NULL));
 }
 QuestionBank::~QuestionBank()
 {
@@ -36,26 +34,38 @@ Question* QuestionBank::RandomQ()
     {
     case 0:
     {
-        double r = 1 + rand() % 6;
+        double r = 1 + rand() % 10;
         sp = new Circle(r);
         break;
     }
     case 1:
     {
-        double w = 2 + rand() % 5;
-        double h = 2 + rand() % 5;
+        double w = 2 + rand() % 8;
+        double h = 2 + rand() % 8;
         sp = new Rect(w, h);
         break;
     }
     case 2:
     {
-        double a = 3, b = 4, c = 5; //3‑4‑5直角三角形，保证合法
-        sp = new Triangle(a, b, c);
+        double a, b, c;
+        while (true)
+        {
+            a = 3 + rand() % 5;
+            b = 4 + rand() % 6;
+            c = 5 + rand() % 7;
+            if (a + b > c && a + c > b && b + c > a)
+            {
+                sp = new Triangle(a, b, c);
+                break;
+            }
+        }
         break;
     }
     case 3:
     {
-        double top = 2, bot = 6, hi = 3;
+        double top = 1 + rand() % 12;
+        double bot = 6 + rand() % 15;
+        double hi = 2 + rand() % 7;
         sp = new Trapezoid(top, bot, hi);
         break;
     }

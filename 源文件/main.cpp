@@ -1,5 +1,6 @@
 #include <iostream>
 #include "QuestionBank.h"
+#include<ctime>
 using namespace std;
 
 void showMenu()
@@ -15,6 +16,8 @@ void showMenu()
 
 int main()
 {
+    srand((unsigned int)time(NULL));
+
     QuestionBank bank("º∏∫Œ¡∑œ∞Ã‚ø‚");
     int op;
     int num;
