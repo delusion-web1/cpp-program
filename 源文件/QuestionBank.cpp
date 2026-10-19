@@ -1,96 +1,147 @@
-#include "QuestionBank.h"
+Ôªø#include "QuestionBank.h"
+#include"Circle.h"
+#include"Rect.h"
+#include"Triangle.h"
+#include"Trapezoid.h"
 #include <iostream>
-#include<cmath>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
 using namespace std;
-void QuestionBank::startQuiz()
+QuestionBank::QuestionBank(string name)
+    : bankName(name), totalScore(0), FinishCount(0)
 {
-    int correct = 0;
-    int total = quesList.size();
-    if (total == 0)
+    srand((unsigned)time(NULL));//ËÆæÈöèÊú∫ÁßçÂ≠ê
+}
+QuestionBank::QuestionBank()
+    : bankName("ÈªòËÆ§Âá†‰ΩïÈ¢òÂ∫ì"), totalScore(0), FinishCount(0)
+{
+    srand((unsigned)time(NULL));
+}
+QuestionBank::~QuestionBank()
+{
+    for (auto q : quesList)
     {
-        cout << "Ã‚ø‚÷–√ª”–Ã‚ƒø£¨«Îœ»ÃÌº”Ã‚ƒø!" << endl;
+        delete q;
+    }
+    quesList.clear();
+    history.clear();
+}
+Question* QuestionBank::RandomQ()
+{
+    int type = rand() % 4; //0ÂúÜÔºå1Áü©ÂΩ¢Ôºå2‰∏âËßíÂΩ¢Ôºå3Ê¢ØÂΩ¢
+    Shape* sp = nullptr;
+
+    switch (type)
+    {
+    case 0:
+    {
+        double r = 1 + rand() % 6;
+        sp = new Circle(r);
+        break;
+    }
+    case 1:
+    {
+        double w = 2 + rand() % 5;
+        double h = 2 + rand() % 5;
+        sp = new Rect(w, h);
+        break;
+    }
+    case 2:
+    {
+        double a = 3, b = 4, c = 5; //3‚Äë4‚Äë5Áõ¥Ëßí‰∏âËßíÂΩ¢Ôºå‰øùËØÅÂêàÊ≥ï
+        sp = new Triangle(a, b, c);
+        break;
+    }
+    case 3:
+    {
+        double top = 2, bot = 6, hi = 3;
+        sp = new Trapezoid(top, bot, hi);
+        break;
+    }
+    }
+    return new Question(sp);
+}
+
+//Âæ™ÁéØÁîüÊàênÈÅìÈöèÊú∫È¢òÁõÆÂä†ÂÖ•È¢òÂ∫ì
+void QuestionBank::generateN(int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        Question* q = RandomQ();
+        quesList.push_back(q);
+    }
+    cout << "ÊàêÂäüÁîüÊàê " << n << " ÈÅìÈöèÊú∫Âá†‰ΩïÈ¢òÁõÆÔºÅ" << endl;
+}
+
+//ÊâìÂç∞È¢òÂ∫ìÊâÄÊúâÈ¢òÁõÆ
+void QuestionBank::showAllQuestion() const
+{
+    cout << "\n=======„Äê" << bankName << "„ÄëÂÖ®ÈÉ®È¢òÁõÆÂàóË°®=======" << endl;
+    for (auto q : quesList)
+    {
+        cout << "È¢òÁõÆ" << q->getId() << "Ôºö" << q->getShape()->showQuestion() << endl;
+    }
+}
+
+//ÂºÄÂßãÁ≠îÈ¢òÔºàÂéüstartQuizÔºåÊîπÂêçstarAnsÔºåÊó†ÈîôÈ¢òÔºâ
+void QuestionBank::startAns()
+{
+    totalScore = 0;
+    FinishCount = 0;
+    history.clear();
+
+    if (quesList.empty())
+    {
+        cout << "È¢òÂ∫ì‰∏∫Á©∫ÔºåËØ∑ÂÖàÁîüÊàêÈ¢òÁõÆÔºÅ" << endl;
         return;
     }
-    for (auto& q : quesList)
+
+    cout << "\n----------ÂºÄÂßãÁªÉ‰π†Á≠îÈ¢ò----------" << endl;
+    for (auto q : quesList)
     {
-        cout << "Ã‚∫≈: " << q.getId() << ", »˝±ﬂ≥§∂»: " << q.getA() << ", " << q.getB() << ", " << q.getC() << endl;
-        double userPerimeter, userArea;
-        string userType;
-        cout << "«Î ‰»Îƒ„º∆À„µƒ÷‹≥§∫Õ√Êª˝: ";
-        cin >> userPerimeter >> userArea;
-        cout << " ‰»Îƒ„≈–∂œµƒ»˝Ω«–Œ¿‡–Õ£∫";
-        cin >> userType;
-        if (cin.fail())
+        double userArea, userPeri;
+        cout << "\n„ÄêÈ¢òÁõÆ" << q->getId() << "„Äë" << q->getShape()->showQuestion() << endl;
+        cout << "ËØ∑ËæìÂÖ•‰Ω†ËÆ°ÁÆóÁöÑÈù¢ÁßØ„ÄÅÂë®ÈïøÔºö";
+        cin >> userArea >> userPeri;
+
+        FinishCount++;
+        history.push_back(q);
+
+        //ÊµÆÁÇπÊï∞‰∏çËÉΩÁõ¥Êé•==ÊØîËæÉÔºåÂÖÅËÆ∏0.001ÁöÑËØØÂ∑Æ
+        bool areaRight = fabs(userArea - q->getCorrectArea()) < 1e-3;
+        bool periRight = fabs(userPeri - q->getCorrectPeri()) < 1e-3;
+
+        if (areaRight && periRight)
         {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cout << " ‰»ÎŒﬁ–ß£¨±æÃ‚Ã¯π˝" << endl;
-            continue;
-        }
-        bool perimeterCorrect = fabs(userPerimeter - q.getPerimeter()) < 1e-6;
-        bool areaCorrect = fabs(userArea - q.getArea()) < 1e-6;
-        bool typeCorrect = (userType == q.getTriangleType());
-        if (perimeterCorrect && areaCorrect && typeCorrect)
-        {
-            cout << "ªÿ¥’˝»∑!" << endl;
-            correct++;
+            cout << "ÂõûÁ≠îÊ≠£Á°ÆÔºÅÊú¨È¢òÂæó10ÂàÜ" << endl;
+            totalScore += 10;
         }
         else
         {
-            cout << "ªÿ¥¥ÌŒÛ!" << endl;
-            cout << "’˝»∑÷‹≥§: " << q.getPerimeter() << ", ’˝»∑√Êª˝ : " << q.getArea() << ", ’˝»∑¿‡–Õ: " << q.getTriangleType() << endl;
+            cout << "ÂõûÁ≠îÈîôËØØÔºÅÊ≠£Á°ÆÈù¢ÁßØÔºö" << q->getCorrectArea() << " ÔºåÊ≠£Á°ÆÂë®ÈïøÔºö" << q->getCorrectPeri() << endl;
         }
     }
-    totalScore = correct;
-    avgScore = total > 0 ? (double)correct / total : 0;
-    cout << "==========≥…º®±®∏Ê===========" << endl;
-    cout << "◊‹Ã‚ ˝: " << total << endl;
-    cout << " ’˝»∑Ã‚ ˝: " << correct << endl;
-    cout << " ◊‹∑÷: " << totalScore << endl;
-    cout << "∆Ωæ˘∑÷: " << avgScore << endl;
+
+    cout << "\n========ÁªÉ‰π†ÁªìÊùü========" << endl;
+    cout << "‰∏ÄÂÖ±‰ΩúÁ≠îÔºö" << FinishCount << " ÈÅìÈ¢òÁõÆ" << endl;
+    cout << "‰Ω†ÁöÑÊÄªÂæóÂàÜÔºö" << totalScore << " ÂàÜ" << endl;
+    double avg = static_cast<double>(totalScore) / FinishCount;
+    cout << "Âπ≥ÂùáÊØèÈ¢òÂæóÂàÜÔºö" << avg << endl;
 }
-QuestionBank::QuestionBank(const std::string& name)
-    :bankName(name), totalScore(0), avgScore(0)
+
+//ÂõûÁúãÂ∑≤ÁªèÂÅöËøáÁöÑÂÖ®ÈÉ®È¢òÁõÆ‰∏éÊ†áÂáÜÁ≠îÊ°à
+void QuestionBank::reviewHistory() const
 {
-}
-bool QuestionBank::addQuestion(const Triangle& q)
-{
-    quesList.push_back(q);
-    return true;
-}
-bool QuestionBank::delQuestionById(int Id)
-{
-    for (auto it = quesList.begin(); it != quesList.end(); ++it)
+    if (history.empty())
     {
-        if (it->getId() == Id)
-        {
-            quesList.erase(it);
-            cout << "Ã‚∫≈Œ™ " << Id << " µƒÃ‚ƒø“—…æ≥˝" << endl;
-            return true;
-        }
+        cout << "‰Ω†ËøòÊ≤°ÊúâÂÅöËøá‰ªª‰ΩïÈ¢òÁõÆÔºÅ" << endl;
+        return;
     }
-    cout << "Ã‚∫≈Œ™ " << Id << " µƒÃ‚ƒø≤ª¥Ê‘⁄" << endl;
-    return false;
-}
-void QuestionBank::showAllQuestion() const
-{
-    cout << "Ã‚ø‚√˚≥∆: " << bankName << endl;
-    cout << "Ã‚ƒø◊‹ ˝: " << quesList.size() << endl;
-    for (const auto& q : quesList)
+    cout << "\n=======ÂõûÁúãÂ∑≤ÂÆåÊàêÁöÑÈ¢òÁõÆ=======" << endl;
+    for (auto q : history)
     {
-        q.showQuestionInfo();
+        cout << "È¢òÁõÆ" << q->getId() << " " << q->getShape()->showQuestion();
+        cout << " Ê†áÂáÜÁ≠îÊ°à Èù¢ÁßØ=" << q->getCorrectArea() << " Âë®Èïø=" << q->getCorrectPeri() << endl;
     }
-}
-int QuestionBank::getCount() const
-{
-    return (int)quesList.size();
-}
-bool QuestionBank::hasQuestions(int id) const
-{
-    for (const auto& q : quesList)
-    {
-        if (q.getId() == id)
-            return true;
-    }
-    return false;
 }

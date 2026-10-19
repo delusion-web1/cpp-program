@@ -1,23 +1,25 @@
 #ifndef QUESTIONBANK_H
 #define QUESTIONBANK_H
 #include <vector>
-#include <string>
-#include "Triangle.h"
-class QuestionBank
+#include "Question.h"
+#include<string>
+using namespace std;
+class QuestionBank//题库
 {
 private:
-    std::string bankName;
-    std::vector<Triangle> quesList;
+    vector<Question*> history;//做题历史
+    vector<Question*> quesList;
+    string bankName;
     double totalScore;
-    double avgScore;
+    int FinishCount;
 public:
-    QuestionBank(const std::string& name);
-    bool addQuestion(const Triangle& q);
-    bool delQuestionById(int Id);
+    QuestionBank(string name);
+    QuestionBank();
+    ~QuestionBank();
+    Question* RandomQ();//生成随机题目
     void showAllQuestion() const;
-    int getCount() const;
-    bool hasQuestions(int id) const;
-    void startQuiz();//做题，算周长和面积
+    void startAns();//开始答题
+    void reviewHistory() const;
+    void generateN(int n);
 };
-
 #endif
