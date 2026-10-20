@@ -11,7 +11,7 @@ double Circle::getPerimeter() const
 }
 string Circle::showQuestion() const
 {
-	return "Բ�εİ뾶=" + to_string(r);
+	return "圆形的半径=" + to_string(r);
 }
 Shape* Circle::clone() const
 {
