@@ -1,17 +1,17 @@
 #include"Circle.h"
 #define PI 3.14159
 Circle::Circle(double radius) : r(radius) {}
-//¼ÆËãÔ²µÄÃæ»ı
+//è®¡ç®—åœ†çš„é¢ç§¯
 double Circle::getArea() const
 {
 	return PI * r * r;
 }
-//¼ÆËãÔ²µÄÖÜ³¤
+//è®¡ç®—åœ†çš„å‘¨é•¿
 double Circle::getPerimeter() const
 {
 	return 2 * PI * r;
 }
 string Circle::showQuestion() const
 {
-	return "Ô²ĞÎde °ë¾¶=" + to_string(r) + "£¬Çë·Ö±ğ¼ÆËãÃæ»ı¡¢ÖÜ³¤£º";
+	return "åœ†å½¢çš„åŠå¾„=" + to_string(r) + "ï¼Œè¯·åˆ†åˆ«è®¡ç®—é¢ç§¯ã€å‘¨é•¿ï¼š";
 }
