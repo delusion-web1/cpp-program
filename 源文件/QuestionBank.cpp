@@ -94,7 +94,7 @@ void QuestionBank::showAllQuestion() const
     }
 }
 
-//开始答题（原startQuiz，改名starAns，无错题）
+//开始答题
 void QuestionBank::startAns()
 {
     totalScore = 0;

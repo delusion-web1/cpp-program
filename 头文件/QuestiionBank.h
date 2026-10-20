@@ -16,6 +16,10 @@ public:
     QuestionBank(string name);
     QuestionBank();
     ~QuestionBank();
+    string getBankName() const
+    {
+        return bankName;
+    }
     Question* RandomQ();//生成随机题目
     void showAllQuestion() const;
     void startAns();//开始答题

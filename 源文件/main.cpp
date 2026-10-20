@@ -17,12 +17,20 @@ void showMenu()
 int main()
 {
     srand((unsigned int)time(NULL));
-
-    QuestionBank bank("几何练习题库");
+    string inputName;
+    cout << "请输入题库名称： ";//无输入时即默认
+    cin.ignore();
+    getline(cin, inputName);
+    QuestionBank bank;
+    if (!inputName.empty())
+    {
+        bank = QuestionBank(inputName);
+    }
     int op;
     int num;
     while (true)
     {
+        cout << "\n当前题库：" << bank.getBankName() << endl;
         showMenu();
         cout << "请输入选项：";
         cin >> op;
