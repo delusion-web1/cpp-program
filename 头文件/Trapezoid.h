@@ -1,7 +1,7 @@
 #ifndef TRAPEZOID_H
 #define TRAPEZOID_H
 #include"Shape.h"
-class Trapezoid :public Shape
+class Trapezoid :public Shape//仅仅是指等腰梯形
 {
 private:
 	double top;
