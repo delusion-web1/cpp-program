@@ -2,7 +2,6 @@
 #define TRIANGLE_H
 #include"Shape.h"
 class Triangle :public Shape
-{
 private:
 	double a, b, c;
 public:
@@ -10,5 +9,6 @@ public:
 	double getArea() const override;
 	double getPerimeter() const override;
 	string showQuestion() const override;
+	Shape* clone() const override;
 };
 #endif

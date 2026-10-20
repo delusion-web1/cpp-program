@@ -9,12 +9,15 @@ class QuestionBank//题库
 private:
     vector<Question*> history;//做题历史
     vector<Question*> quesList;
+    vector<Question*> wrongList;
     string bankName;
     double totalScore;
     int FinishCount;
 public:
     QuestionBank(string name);
     QuestionBank();
+    QuestionBank(const QuestionBank& other);
+    QuestionBank& operator=(const QuestionBank& other);
     ~QuestionBank();
     string getBankName() const
     {
@@ -24,6 +27,8 @@ public:
     void showAllQuestion() const;
     void startAns();//开始答题
     void reviewHistory() const;
+    void reviewWrongQuestions() const;
+    bool deleteQuestion(int qid);
     void generateN(int n);
 };
 #endif

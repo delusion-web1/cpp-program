@@ -13,5 +13,9 @@ double Trapezoid::getPerimeter() const
 	return top + bottom + 2 * yao;
 }
 string Trapezoid::showQuestion() const {
-	return "梯形的上底为： " + to_string(top) + ",下底为： " + to_string(bottom) + "，高为： " + to_string(height) + "请算出面积和周长：";
+	return "梯形的上底为： " + to_string(top) + ",下底为： " + to_string(bottom) + "，高为： " + to_string(height);
+}
+Shape* Trapezoid::clone() const
+{
+	return new Trapezoid(*this);
 }

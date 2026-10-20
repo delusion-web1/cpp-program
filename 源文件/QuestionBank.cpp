@@ -1,157 +1,243 @@
-ï»¿#include "QuestionBank.h"
-#include"Circle.h"
-#include"Rect.h"
-#include"Triangle.h"
-#include"Trapezoid.h"
+#include "QuestionBank.h"
+#include "Circle.h"
+#include "Rect.h"
+#include "Triangle.h"
+#include "Trapezoid.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
 using namespace std;
 QuestionBank::QuestionBank(string name)
-    : bankName(name), totalScore(0), FinishCount(0)
+	: bankName(name), totalScore(0), FinishCount(0)
 {
 }
 QuestionBank::QuestionBank()
-    : bankName("é»˜è®¤å‡ ä½•é¢˜åº“"), totalScore(0), FinishCount(0)
+	: bankName("Ä¬ÈÏ¼¸ºÎÌâ¿â"), totalScore(0), FinishCount(0)
 {
 }
+QuestionBank::QuestionBank(const QuestionBank& other)
+	: bankName(other.bankName), totalScore(other.totalScore), FinishCount(other.FinishCount)
+{
+	for (auto q : other.quesList)
+		quesList.push_back(new Question(*q));
+	for (auto q : other.history)
+		history.push_back(new Question(*q));
+	for (auto q : other.wrongList)
+		wrongList.push_back(new Question(*q));
+}
+QuestionBank& QuestionBank::operator=(const QuestionBank& other)
+{
+	if (this != &other)
+	{
+		for (auto q : quesList) delete q;
+		for (auto q : history) delete q;
+		for (auto q : wrongList) delete q;
+		quesList.clear();
+		history.clear();
+		wrongList.clear();
+		bankName = other.bankName;
+		totalScore = other.totalScore;
+		FinishCount = other.FinishCount;
+		for (auto q : other.quesList)
+			quesList.push_back(new Question(*q));
+		for (auto q : other.history)
+			history.push_back(new Question(*q));
+		for (auto q : other.wrongList)
+			wrongList.push_back(new Question(*q));
+	}
+	return *this;
+}
+
 QuestionBank::~QuestionBank()
 {
-    for (auto q : quesList)
-    {
-        delete q;
-    }
-    quesList.clear();
-    history.clear();
+	for (auto q : quesList) delete q;
+	for (auto q : history) delete q;
+	for (auto q : wrongList) delete q;
+	quesList.clear();
+	history.clear();
+	wrongList.clear();
 }
+
+// Ëæ»úÉú³ÉÒ»µÀÌâ£º0Ô²£¬1¾ØĞÎ£¬2Èı½ÇĞÎ£¬3ÌİĞÎ
 Question* QuestionBank::RandomQ()
 {
-    int type = rand() % 4; //0åœ†ï¼Œ1çŸ©å½¢ï¼Œ2ä¸‰è§’å½¢ï¼Œ3æ¢¯å½¢
-    Shape* sp = nullptr;
+	int type = rand() % 4;
+	Shape* sp = nullptr;
 
-    switch (type)
-    {
-    case 0:
-    {
-        double r = 1 + rand() % 10;
-        sp = new Circle(r);
-        break;
-    }
-    case 1:
-    {
-        double w = 2 + rand() % 8;
-        double h = 2 + rand() % 8;
-        sp = new Rect(w, h);
-        break;
-    }
-    case 2:
-    {
-        double a, b, c;
-        while (true)
-        {
-            a = 3 + rand() % 5;
-            b = 4 + rand() % 6;
-            c = 5 + rand() % 7;
-            if (a + b > c && a + c > b && b + c > a)
-            {
-                sp = new Triangle(a, b, c);
-                break;
-            }
-        }
-        break;
-    }
-    case 3:
-    {
-        double top = 1 + rand() % 12;
-        double bot = 6 + rand() % 15;
-        double hi = 2 + rand() % 7;
-        sp = new Trapezoid(top, bot, hi);
-        break;
-    }
-    }
-    return new Question(sp);
+	switch (type)
+	{
+	case 0:
+	{
+		double r = 1 + rand() % 10;
+		sp = new Circle(r);
+		break;
+	}
+	case 1:
+	{
+		double w = 2 + rand() % 8;
+		double h = 2 + rand() % 8;
+		sp = new Rect(w, h);
+		break;
+	}
+	case 2:
+	{
+		double a, b, c;
+		while (true)
+		{
+			a = 3 + rand() % 5;
+			b = 4 + rand() % 6;
+			c = 5 + rand() % 7;
+			if (a + b > c && a + c > b && b + c > a)
+			{
+				sp = new Triangle(a, b, c);
+				break;
+			}
+		}
+		break;
+	}
+	case 3:
+	{
+		double top = 1 + rand() % 12;
+		double bot = 6 + rand() % 15;
+		double hi = 2 + rand() % 7;
+		sp = new Trapezoid(top, bot, hi);
+		break;
+	}
+	}
+	return new Question(sp);
 }
-
-//å¾ªç¯ç”Ÿæˆné“éšæœºé¢˜ç›®åŠ å…¥é¢˜åº“
 void QuestionBank::generateN(int n)
 {
-    for (int i = 0; i < n; i++)
-    {
-        Question* q = RandomQ();
-        quesList.push_back(q);
-    }
-    cout << "æˆåŠŸç”Ÿæˆ " << n << " é“éšæœºå‡ ä½•é¢˜ç›®ï¼" << endl;
+	for (int i = 0; i < n; i++)
+	{
+		Question* q = RandomQ();
+		quesList.push_back(q);
+	}
+	cout << "³É¹¦Éú³É " << n << " µÀËæ»ú¼¸ºÎÌâÄ¿£¡" << endl;
 }
-
-//æ‰“å°é¢˜åº“æ‰€æœ‰é¢˜ç›®
 void QuestionBank::showAllQuestion() const
 {
-    cout << "\n=======ã€" << bankName << "ã€‘å…¨éƒ¨é¢˜ç›®åˆ—è¡¨=======" << endl;
-    for (auto q : quesList)
-    {
-        cout << "é¢˜ç›®" << q->getId() << "ï¼š" << q->getShape()->showQuestion() << endl;
-    }
+	cout << "\n=======¡¾" << bankName << "¡¿È«²¿ÌâÄ¿ÁĞ±í=======" << endl;
+	for (auto q : quesList)
+	{
+		cout << "ÌâÄ¿" << q->getId() << "£º" << q->getShape()->showQuestion() << endl;
+	}
 }
-
-//å¼€å§‹ç­”é¢˜
 void QuestionBank::startAns()
 {
-    totalScore = 0;
-    FinishCount = 0;
-    history.clear();
+	totalScore = 0;
+	FinishCount = 0;
+	if (quesList.empty())
+	{
+		cout << "Ìâ¿âÎª¿Õ£¬ÇëÏÈÉú³ÉÌâÄ¿£¡" << endl;
+		return;
+	}
+	int remain = 0;
+	for (auto q : quesList)
+	{
+		bool done = false;
+		for (auto h : history)
+		{
+			if (h->getId() == q->getId()) { done = true; break; }
+		}
+		if (!done) remain++;
+	}
+	if (remain == 0)
+	{
+		cout << "ËùÓĞÌâÄ¿¶¼ÒÑ¾­×ö¹ıÁË£¡ÇëÏÈÖØĞÂÉú³ÉĞÂÌâÄ¿¡£" << endl;
+		return;
+	}
+	cout << "\n----------¿ªÊ¼Á·Ï°´ğÌâ£¨Ê£Óà" << remain << "µÀÎ´×ö£©----------" << endl;
+	for (auto q : quesList)
+	{
+		bool done = false;
+		for (auto h : history)
+		{
+			if (h->getId() == q->getId()) { done = true; break; }
+		}
+		if (done) continue;
 
-    if (quesList.empty())
-    {
-        cout << "é¢˜åº“ä¸ºç©ºï¼Œè¯·å…ˆç”Ÿæˆé¢˜ç›®ï¼" << endl;
-        return;
-    }
+		double userArea, userPeri;
+		cout << "\n¡¾ÌâÄ¿" << q->getId() << "¡¿" << q->getShape()->showQuestion() << endl;
+		cout << "ÇëÊäÈëÄã¼ÆËãµÄÃæ»ı¡¢ÖÜ³¤£º";
+		cin >> userArea >> userPeri;
 
-    cout << "\n----------å¼€å§‹ç»ƒä¹ ç­”é¢˜----------" << endl;
-    for (auto q : quesList)
-    {
-        double userArea, userPeri;
-        cout << "\nã€é¢˜ç›®" << q->getId() << "ã€‘" << q->getShape()->showQuestion() << endl;
-        cout << "è¯·è¾“å…¥ä½ è®¡ç®—çš„é¢ç§¯ã€å‘¨é•¿ï¼š";
-        cin >> userArea >> userPeri;
+		FinishCount++;
+		history.push_back(new Question(*q));
+		bool areaRight = fabs(userArea - q->getCorrectArea()) < 1e-3;
+		bool periRight = fabs(userPeri - q->getCorrectPeri()) < 1e-3;
 
-        FinishCount++;
-        history.push_back(q);
-
-        //æµ®ç‚¹æ•°ä¸èƒ½ç›´æ¥==æ¯”è¾ƒï¼Œå…è®¸0.001çš„è¯¯å·®
-        bool areaRight = fabs(userArea - q->getCorrectArea()) < 1e-3;
-        bool periRight = fabs(userPeri - q->getCorrectPeri()) < 1e-3;
-
-        if (areaRight && periRight)
-        {
-            cout << "å›ç­”æ­£ç¡®ï¼æœ¬é¢˜å¾—10åˆ†" << endl;
-            totalScore += 10;
-        }
-        else
-        {
-            cout << "å›ç­”é”™è¯¯ï¼æ­£ç¡®é¢ç§¯ï¼š" << q->getCorrectArea() << " ï¼Œæ­£ç¡®å‘¨é•¿ï¼š" << q->getCorrectPeri() << endl;
-        }
-    }
-
-    cout << "\n========ç»ƒä¹ ç»“æŸ========" << endl;
-    cout << "ä¸€å…±ä½œç­”ï¼š" << FinishCount << " é“é¢˜ç›®" << endl;
-    cout << "ä½ çš„æ€»å¾—åˆ†ï¼š" << totalScore << " åˆ†" << endl;
-    double avg = static_cast<double>(totalScore) / FinishCount;
-    cout << "å¹³å‡æ¯é¢˜å¾—åˆ†ï¼š" << avg << endl;
+		if (areaRight && periRight)
+		{
+			cout << "»Ø´ğÕıÈ·£¡±¾ÌâµÃ10·Ö" << endl;
+			totalScore += 10;
+		}
+		else
+		{
+			cout << "»Ø´ğ´íÎó£¡ÕıÈ·Ãæ»ı£º" << q->getCorrectArea() << " £¬ÕıÈ·ÖÜ³¤£º" << q->getCorrectPeri() << endl;
+			bool alreadyIn = false;
+			for (auto w : wrongList)
+			{
+				if (w->getId() == q->getId()) { alreadyIn = true; break; }
+			}
+			if (!alreadyIn)
+			{
+				wrongList.push_back(new Question(*q));
+			}
+		}
+	}
+	cout << "\n========Á·Ï°½áÊø========" << endl;
+	cout << "±¾´Î×÷´ğ£º" << FinishCount << " µÀÌâÄ¿" << endl;
+	cout << "ÄãµÄ×ÜµÃ·Ö£º" << totalScore << " ·Ö" << endl;
+	if (FinishCount > 0)
+	{
+		double avg = static_cast<double>(totalScore) / FinishCount;
+		cout << "Æ½¾ùÃ¿ÌâµÃ·Ö£º" << avg << endl;
+	}
 }
-
-//å›çœ‹å·²ç»åšè¿‡çš„å…¨éƒ¨é¢˜ç›®ä¸æ ‡å‡†ç­”æ¡ˆ
 void QuestionBank::reviewHistory() const
 {
-    if (history.empty())
-    {
-        cout << "ä½ è¿˜æ²¡æœ‰åšè¿‡ä»»ä½•é¢˜ç›®ï¼" << endl;
-        return;
-    }
-    cout << "\n=======å›çœ‹å·²å®Œæˆçš„é¢˜ç›®=======" << endl;
-    for (auto q : history)
-    {
-        cout << "é¢˜ç›®" << q->getId() << " " << q->getShape()->showQuestion();
-        cout << " æ ‡å‡†ç­”æ¡ˆ é¢ç§¯=" << q->getCorrectArea() << " å‘¨é•¿=" << q->getCorrectPeri() << endl;
-    }
+	if (history.empty())
+	{
+		cout << "Äã»¹Ã»ÓĞ×ö¹ıÈÎºÎÌâÄ¿£¡" << endl;
+		return;
+	}
+	cout << "\n=======»Ø¿´ÒÑÍê³ÉµÄÌâÄ¿=======" << endl;
+	for (auto q : history)
+	{
+		cout << "ÌâÄ¿" << q->getId() << " " << q->getShape()->showQuestion();
+		cout << "\n±ê×¼´ğ°¸ Ãæ»ı=" << q->getCorrectArea() << " ÖÜ³¤=" << q->getCorrectPeri() << endl;
+		cout << endl;
+	}
+}
+void QuestionBank::reviewWrongQuestions() const
+{
+	if (wrongList.empty())
+	{
+		cout << "Ì«°ôÁË£¡Äã»¹Ã»ÓĞ´íÌâ¡£" << endl;
+		return;
+	}
+	cout << "\n=======´íÌâ±¾=======" << endl;
+	for (auto q : wrongList)
+	{
+		cout << "ÌâÄ¿" << q->getId() << " " << q->getShape()->showQuestion();
+		cout << "\nÕıÈ·´ğ°¸ Ãæ»ı=" << q->getCorrectArea() << " ÖÜ³¤=" << q->getCorrectPeri() << endl;
+		cout << endl;
+	}
+}
+bool QuestionBank::deleteQuestion(int qid)
+{
+	for (auto it = quesList.begin(); it != quesList.end(); ++it)
+	{
+		if ((*it)->getId() == qid)
+		{
+			delete* it;
+			quesList.erase(it);
+			cout << "ÌâÄ¿" << qid << "ÒÑÉ¾³ı£¡" << endl;
+			return true;
+		}
+	}
+	cout << "Î´ÕÒµ½±àºÅÎª" << qid << "µÄÌâÄ¿£¡" << endl;
+	return false;
 }

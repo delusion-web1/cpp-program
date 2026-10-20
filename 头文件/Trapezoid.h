@@ -12,5 +12,6 @@ public:
 	double getArea() const override;
 	double getPerimeter() const override;
 	string showQuestion() const override;
+	Shape* clone() const override;
 };
 #endif

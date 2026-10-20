@@ -11,6 +11,8 @@ private:
     double correctPerimeter;
 public:
     Question(Shape* s);
+    Question(const Question& other);
+    Question& operator=(const Question& other);
     ~Question();
     int getId() const;
     double getCorrectArea() const;
