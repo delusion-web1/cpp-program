@@ -1,7 +1,7 @@
 #ifndef TRAPEZOID_H
 #define TRAPEZOID_H
 #include"Shape.h"
-class Trapezoid :public Shape//仅仅是指等腰梯形
+class Trapezoid :public Shape//仅仅指等腰梯形
 {
 private:
 	double top;
@@ -13,5 +13,8 @@ public:
 	double getPerimeter() const override;
 	string showQuestion() const override;
 	Shape* clone() const override;
+	void saveToFile(ofstream& out) const override;
+	string getShapeType() const override;
+	void printFormula() const override;
 };
 #endif

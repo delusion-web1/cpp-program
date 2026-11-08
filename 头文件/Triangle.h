@@ -2,6 +2,7 @@
 #define TRIANGLE_H
 #include"Shape.h"
 class Triangle :public Shape
+{
 private:
 	double a, b, c;
 public:
@@ -10,5 +11,8 @@ public:
 	double getPerimeter() const override;
 	string showQuestion() const override;
 	Shape* clone() const override;
+	void saveToFile(ofstream& out) const override;
+	string getShapeType() const override;
+	void printFormula() const override;
 };
 #endif
