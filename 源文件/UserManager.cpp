@@ -57,8 +57,8 @@ bool UserManager::login(const string& name, const string& pwd)
 bool UserManager::registerUser(const string& name, const string& pwd)
 {
 	for (auto& u : users)
-		if (u.getName() == name) return false;//ÓÃ»§ÃûÒÑ´æÔÚ
-	if (!checkPasswordRule(pwd)) return false;//ÃÜÂë²»·ûºÏ¹æÔò
+		if (u.getName() == name) return false;//ç”¨æˆ·åå·²å­˜åœ¨
+	if (!checkPasswordRule(pwd)) return false;//å¯†ç ä¸ç¬¦åˆè§„åˆ™
 	users.push_back(User(name, pwd));
 	saveUsers();
 	return true;
@@ -67,7 +67,7 @@ bool UserManager::checkPasswordRule(const string& pwd) const
 {
 	if (pwd.length() < 6 || pwd.length() > 20)
 	{
-		cout << "ÃÜÂë³¤¶ÈĞèÎª6~20Î»£¡" << endl;
+		cout << "å¯†ç é•¿åº¦éœ€ä¸º6~20ä½ï¼" << endl;
 		return false;
 	}
 	bool hasLetter = false;
@@ -80,7 +80,7 @@ bool UserManager::checkPasswordRule(const string& pwd) const
 	}
 	if (!hasLetter || !hasDigit)
 	{
-		cout << "ÃÜÂë±ØĞëÍ¬Ê±°üº¬×ÖÄ¸ºÍÊı×Ö£¡" << endl;
+		cout << "å¯†ç å¿…é¡»åŒæ—¶åŒ…å«å­—æ¯å’Œæ•°å­—ï¼" << endl;
 		return false;
 	}
 	return true;
@@ -91,7 +91,7 @@ bool UserManager::deleteUser(const string& name, const string& pwd)
 	{
 		if (it->getName() == name && it->checkPassword(pwd))
 		{
-			remove(("data/bank_" + name + ".txt").c_str());//Í¬Ê±É¾³ı¸ÃÓÃ»§µÄÌâÄ¿´æµµ
+			remove(("data/bank_" + name + ".txt").c_str());//åŒæ—¶åˆ é™¤è¯¥ç”¨æˆ·çš„é¢˜ç›®å­˜æ¡£
 			users.erase(it);
 			saveUsers();
 			return true;
@@ -110,16 +110,16 @@ void UserManager::showRankByAccuracy() const
 	vector<User> tmp;
 	for (auto& u : users)
 		if (u.getTotalAnswered() > 0) tmp.push_back(u);
-	if (tmp.empty()) { cout << "ÔİÎŞ×öi¼ÇÂ¼£¬ÕıÈ·ÂÊÅÅĞĞ°ñÎª¿Õ" << endl; return; }
+	if (tmp.empty()) { cout << "æš‚æ— åšé¢˜è®°å½•ï¼Œæ­£ç¡®ç‡æ’è¡Œæ¦œä¸ºç©º" << endl; return; }
 	sort(tmp.begin(), tmp.end(), cmpByAccuracy);
-	cout << "\n===== ÕıÈ·ÂÊÅÅĞĞ°ñ=====" << endl;
+	cout << "\n===== æ­£ç¡®ç‡æ’è¡Œæ¦œ=====" << endl;
 	int rank = 1;
 	for (auto& u : tmp)
 	{
-		cout << "µÚ" << rank++ << "Ãû£º" << u.getName()
-			<< "  ÕıÈ·ÂÊ" << u.getAccuracy() << "%"
-			<< "£¨´ğ¶Ô" << u.getCorrectCount() << "/" << u.getTotalAnswered() << "Ìâ£©"
-			<< "  Æ½¾ùÃ¿Ìâ" << u.getAvgTime() << "Ãë" << endl;
+		cout << "ç¬¬" << rank++ << "åï¼š" << u.getName()
+			<< "  æ­£ç¡®ç‡" << u.getAccuracy() << "%"
+			<< "ï¼ˆç­”å¯¹" << u.getCorrectCount() << "/" << u.getTotalAnswered() << "é¢˜ï¼‰"
+			<< "  å¹³å‡æ¯é¢˜" << u.getAvgTime() << "ç§’" << endl;
 	}
 }
 void UserManager::showRankByTime() const
@@ -127,14 +127,14 @@ void UserManager::showRankByTime() const
 	vector<User> tmp;
 	for (auto& u : users)
 		if (u.getTotalAnswered() > 0) tmp.push_back(u);
-	if (tmp.empty()) { cout << "ÔİÎŞ×öÌâ¼ÇÂ¼£¬×öÌâËÙ¶ÈÅÅĞĞ°ñÎª¿Õ" << endl; return; }
+	if (tmp.empty()) { cout << "æš‚æ— åšé¢˜è®°å½•ï¼Œåšé¢˜é€Ÿåº¦æ’è¡Œæ¦œä¸ºç©º" << endl; return; }
 	sort(tmp.begin(), tmp.end(), cmpByTime);
-	cout << "\n===== ×öÌâËÙ¶ÈÅÅĞĞ°ñ=====" << endl;
+	cout << "\n===== åšé¢˜é€Ÿåº¦æ’è¡Œæ¦œ=====" << endl;
 	int rank = 1;
 	for (auto& u : tmp)
 	{
-		cout << "µÚ" << rank++ << "Ãû£º" << u.getName()
-			<< "  Æ½¾ùÃ¿Ìâ" << u.getAvgTime() << "Ãë"
-			<< "£¨ÕıÈ·ÂÊ" << u.getAccuracy() << "%£©" << endl;
+		cout << "ç¬¬" << rank++ << "åï¼š" << u.getName()
+			<< "  å¹³å‡æ¯é¢˜" << u.getAvgTime() << "ç§’"
+			<< "ï¼ˆæ­£ç¡®ç‡" << u.getAccuracy() << "%ï¼‰" << endl;
 	}
 }
